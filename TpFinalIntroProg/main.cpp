@@ -191,6 +191,93 @@ public:
 };
 
 
+//nave enemiga 
+
+
+class naveEnemiga : public Principal {
+private:
+	bool activa;
+	int limiteIzq;
+	int limiteDer;
+	bool moviendoDerecha;
+	int ultDesplazamiento;
+	int aPosX, aPosY;
+	int contadorLateral;
+	int esperarLateral;
+	
+public:
+	naveEnemiga(){
+		activa=false;
+		moviendoDerecha=true;
+		ultDesplazamiento= 0;
+		contadorLateral = 0;
+		esperarLateral = 50;
+		
+	}
+	
+	void activar(int _desplazamiento) {
+		posY = 1;
+		posX = ANCHO / 2;
+		limiteIzq = posX - 5;
+		limiteDer = posX + 5;
+		activa = true;
+		ultDesplazamiento = _desplazamiento;
+		contadorLateral = 0;
+	}
+	
+	void desactivar() {
+		activa = false;
+	}
+	
+	void actDesplazamiento(int _desplazamiento) {
+		if (_desplazamiento > ultDesplazamiento) {
+			posY++;
+			ulDesplazamiento = _desplazamiento;
+			if (posY > VENTANA) {
+				desactivar();
+			}
+		}
+	}
+	
+	void actualizar() override {
+		if (!activa) return;
+		
+		aPosX = posX;
+		aPosY = posY;
+		
+		// Movimiento lateral medio raro
+		if (moviendoDerecha) {
+			posX++;
+			if (posX >= limiteDer) moviendoDerecha = false;
+		} else {
+			posX--;
+			if (posX <= limiteIzq) moviendoDerecha = true;
+		}
+	}
+	
+	void dibujar() override {
+		if (!activa) return;
+		
+		gotoxy(posX, posY);
+		textcolor(15);
+		putchar('X');
+		gotoxy(aPosX,aPosY);
+		putchar(' ');
+	}
+	
+	int getX(){ 
+		return posX; 
+	}
+		int getY() { 
+			return posY; 
+		}
+		bool estaActiva() { 
+			return activa; 
+		}
+		
+};
+
+
 int main (int argc, char *argv[]) {
 	return 0;
 }
