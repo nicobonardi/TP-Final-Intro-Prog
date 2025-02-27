@@ -89,6 +89,108 @@ public:
 			
 };
 
+// nave 
+
+
+class nave : public Principal{
+private:
+	int vidas;
+	bool inmunidad;
+	int aPosX, aPosY;
+	clock_t tUltimaColision;
+	
+	
+public:
+	bool dispara;
+	
+	nave(){
+		posX = ANCHO / 2;
+		posY = 20;
+		aPosX = posX;
+		aPosY = posY;
+		vidas = 5; 
+		tUltimaColision = clock();
+		dispara = false;
+	}
+		
+		void mover(){ // mover con las teclas
+			
+			if(kbhit()){
+				char tecla = getch();
+				if(tecla == 75 && posX > 0){ // Izquierda
+					aPosX = posX;
+					posX--;
+				}
+				if(tecla == 77 && posX < ANCHO -1){ // Derecha
+					aPosX = posX;
+					posX++;
+				}
+				if(tecla==' '){
+					dispara = true;
+				}
+			} else {
+				gotoxy(aPosX, aPosY);
+				putchar(' ');
+			}
+		}
+			
+			bool getDistapara(){
+				return dispara;
+			}
+				void setDispara(bool _dispara){
+					dispara = _dispara;
+				}
+					
+					void dibujar() override{
+						gotoxy(aPosX,posY);
+						putchar(' ');
+						gotoxy(posX,posY);
+						if(inmunidad){
+							textcolor(LIGHTRED);
+						} else {
+							textcolor(WHITE);
+						}
+						putchar('^');
+						gotoxy(41,21);
+					}
+					void actualizar() override{
+						
+					}
+					int getVidas(){
+						return vidas;
+					}
+						
+						int getX(){
+							return posX;
+						}
+							int getY(){
+								return posY;
+							}
+								bool getInmunidad(){
+									return inmunidad;
+								}
+									
+									
+									void manejarColision(char _caracter) { 
+										// Si el carácter no es espacio, cuenta como colisión
+										if (_caracter != ' ') {
+											// Verificar si ha pasado el tiempo de inmunidad
+											if (clock() - tUltimaColision >= TIEMPO_INMUNIDAD * CLOCKS_PER_SEC / 1000) {
+												vidas--;
+												tUltimaColision = clock();
+												mensaje = "Cuidado, puedes dañar la nave";
+											}
+										}
+										
+										if((clock() - tUltimaColision >= TIEMPO_INMUNIDAD * CLOCKS_PER_SEC / 1000)) {
+											inmunidad = false;
+										} else {
+											inmunidad= true;
+										}
+									}
+};
+
+
 int main (int argc, char *argv[]) {
 	return 0;
 }
