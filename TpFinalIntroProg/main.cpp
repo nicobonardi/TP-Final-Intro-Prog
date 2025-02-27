@@ -339,6 +339,110 @@ public:
 };
 
 
+//gestor de interface 
+
+class pantalla {
+public:
+	void mostrarPantallaInicial() {
+		clrscr();
+		textcolor(LIGHTCYAN);
+		gotoxy(10, 3);
+		cout << "DEFENSA EN EL GRAN CANON DE TITAN";
+		gotoxy(5, 12);
+		cout << "Dispara algunos proyectiles.";
+		gotoxy(5, 13);
+		cout << "Suerte y espera los refuerzos.";
+		textcolor(WHITE);
+		gotoxy(5, 15);
+		cout << "Juega con las flechas DERECHA e IZQUIERDA";
+		gotoxy(5, 16);
+		cout << "Dispara con ESPACIO" ;
+		
+		gotoxy(10, 19);
+		cout << "Presiona cualquier tecla para comenzar...";
+		getch(); // Espera a que el jugador presione una tecla
+	}
+	
+	void mostrarPantallaGameOver(int puntaje) {
+		clrscr();
+		textcolor(RED);
+		gotoxy(10, 6);
+		cout << "GAME OVER";
+		textcolor(LIGHTMAGENTA);
+		cout << "Puntaje final: " << puntaje;
+		textcolor(WHITE);
+		esperar(10000);
+		mostrarPantallaInicial();
+	}
+	
+	void mostrarPantallaVictoria(int puntaje) {
+		clrscr();
+		textcolor(GREEN);
+		gotoxy(10, 6);
+		textcolor(WHITE);
+		cout << "FELICITACIONES!";
+		gotoxy(10, 16);
+		textcolor(LIGHTBLUE);
+		cout << "Puntaje final: " << puntaje;
+		textcolor(WHITE);
+		esperar(10000); // Espera 7 segundos
+		mostrarPantallaInicial();
+	}
+	
+	void dibujarMarco() {
+		textcolor(WHITE);
+		// solo agrego línea inferior
+		gotoxy(1, VENTANA + 2);
+		putchar(218); 
+		gotoxy(1, VENTANA + 3);
+		putchar(179); 
+		gotoxy(ANCHO, VENTANA + 2);
+		putchar(191); 
+		gotoxy(ANCHO, VENTANA + 3);
+		putchar(179);
+		gotoxy(1, VENTANA + 4);
+		putchar(195); 
+		gotoxy(1, VENTANA + 5);
+		putchar(179);
+		gotoxy(ANCHO, VENTANA + 4);
+		putchar(180); 
+		gotoxy(ANCHO, VENTANA + 5);
+		putchar(179);
+		gotoxy(1, VENTANA + 6);
+		putchar(192); 
+		gotoxy(ANCHO, VENTANA + 6);
+		putchar(217); 
+		for (int i = 2; i <= ANCHO -1; i++) {
+			gotoxy(i, VENTANA + 2);
+			putchar(196);
+			gotoxy(i, VENTANA + 4);
+			putchar(196);
+			gotoxy(i, VENTANA + 6);
+			putchar(196);
+		}
+		gotoxy(ANCHO/2, VENTANA + 2);
+		putchar(194);
+		gotoxy(ANCHO/2, VENTANA + 3);
+		putchar(179);
+		gotoxy(ANCHO/2, VENTANA + 4);
+		putchar(193);
+		
+		textcolor(WHITE);
+	}
+	
+	void actInterface(int vidas, int puntaje) {
+		gotoxy(5, VENTANA + 3);
+		cout << "VIDAS: " << vidas;
+		gotoxy(21, VENTANA + 3);
+		cout << "   PUNTAJE: " << puntaje;
+		textcolor(LIGHTGREEN);
+		gotoxy(2,VENTANA + 5);
+		cout << mensaje;
+		textcolor(WHITE);
+	}
+	
+};
+
 int main (int argc, char *argv[]) {
 	return 0;
 }
