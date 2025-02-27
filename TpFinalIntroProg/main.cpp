@@ -566,6 +566,8 @@ public:
 };
 
 int main (int argc, char *argv[]) {
+	Juego juego;
+	juego.ejecutar();
 	return 0;
 }
 
