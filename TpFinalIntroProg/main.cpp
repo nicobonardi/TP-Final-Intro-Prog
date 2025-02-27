@@ -277,6 +277,67 @@ public:
 		
 };
 
+//proyectil
+
+class proyectil : public Principal {
+private:
+	bool activo;
+	clock_t tInicio;
+	int velocidadVertical;
+public:
+	proyectil(){
+		activo=false;
+		velocidadVertical=100;
+	}
+	
+	void activar(int x, int y) {
+		posX = x;
+		posY = y - 1;
+		activo = true;
+		tInicio = clock();
+	}
+	
+	void desactivar() {
+		activo = false;
+	}
+	
+	void actualizar() override {
+		if (!activo) return;
+		
+		if (clock() - tInicio >= (velocidadVertical * CLOCKS_PER_SEC / 1000)) {
+			gotoxy(posX, posY);
+			putchar(' ');
+			
+			posY--;
+			
+			if (posY < 0) {
+				desactivar();
+			}
+			
+			tInicio = clock();
+		}
+	}
+	
+	void dibujar() override {
+		if (!activo) return;
+		
+		gotoxy(posX, posY);
+		putchar('|');
+	}
+	
+	bool estaActivo() {
+		return activo;
+	}
+	
+	int getX() {
+		return posX;
+	}
+	
+	int getY() {
+		return posY;
+	}
+};
+
 
 int main (int argc, char *argv[]) {
 	return 0;
