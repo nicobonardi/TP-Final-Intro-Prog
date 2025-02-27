@@ -440,7 +440,129 @@ public:
 		cout << mensaje;
 		textcolor(WHITE);
 	}
+
+};
+
+
+//juego 
+
+class Juego {
+private:
+	pantalla gestorPantalla;
+	terreno zona;
+	nave gladiador;
+	naveEnemiga enemigo;
+	proyectil proyectiles[5];
 	
+	clock_t tInicioScroll;
+	clock_t tInicioLateral;
+	
+	void inicializar() {
+		gladiador = nave();
+		enemigo = naveEnemiga();
+		for (int i = 0; i < 5; i++) {
+			proyectiles[i] = proyectil();
+		}
+		puntaje = 0;
+		desplazamiento = 0;
+		VELOCIDAD = VELOCIDAD_INICIAL;
+		
+		zona.inicializarCanon();
+		clrscr();
+		
+		tInicioScroll = clock();
+		tInicioLateral = clock();
+		mensaje = " ";
+	}
+	
+	void manejarEntrada() {
+		gladiador.mover();
+		if (gladiador.dispara) {
+			for (int i = 0; i < 5; i++) {
+				if (!proyectiles[i].estaActivo()) {
+					proyectiles[i].activar(gladiador.getX(), gladiador.getY());
+					break;
+				}
+			}
+			gladiador.dispara = false;
+		}
+	}
+	
+	void actualizarJuego() {
+		if (clock() - tInicioScroll >= (VELOCIDAD * CLOCKS_PER_SEC / 1000)) {
+			desplazamiento++;
+			puntaje += 10;
+			zona.dibujar();
+			enemigo.actualizarDesplazamiento(desplazamiento);
+			tInicioScroll = clock();
+			if (desplazamiento % 25 == 0 && !enemigo.estaActiva()) {
+				enemigo.activar(desplazamiento);
+			}
+		}
+		
+		if (clock() - tInicioLateral >= (VELOCIDAD * 2 * CLOCKS_PER_SEC / 1000)) {
+			enemigo.actualizar();
+			tInicioLateral = clock();
+		}
+		for (int i = 0; i < 5; i++) {
+			if (proyectiles[i].estaActivo()) {
+				proyectiles[i].actualizar();
+				if (enemigo.estaActiva() &&
+					proyectiles[i].getX() == enemigo.getX() &&
+					proyectiles[i].getY() == enemigo.getY()) {
+					enemigo.desactivar();
+					proyectiles[i].desactivar();
+					puntaje += 100;
+					mensaje = "Excelente Puntería                  ";
+				}
+			}
+		}
+		
+		gladiador.manejarColision(zona.fondo(gladiador.getX()));
+		if (enemigo.estaActiva() &&
+			gladiador.getX() == enemigo.getX() &&
+			gladiador.getY() == enemigo.getY()) {
+			gladiador.manejarColision('X'); 
+		}
+	}
+	
+	void dibujarJuego() {
+		gestorPantalla.dibujarMarco();
+		gestorPantalla.actualizarInterface(gladiador.getVidas(), puntaje);
+		enemigo.dibujar();
+		gladiador.dibujar();
+		for (int i = 0; i < 5; i++) {
+			proyectiles[i].dibujar();
+		}
+	}
+	
+	bool verificarEstado() {
+		if (gladiador.getVidas() <= 0) {
+			gestorPantalla.mostrarPantallaGameOver(puntaje);
+			return false;
+		}
+		if (desplazamiento >= 800) {
+			gestorPantalla.mostrarPantallaVictoria(puntaje);
+			return false;
+		}
+		return true;
+	}
+	
+public:
+		void ejecutar() {
+			while (true) {
+				gestorPantalla.mostrarPantallaInicial();
+				inicializar();
+				while (true) {
+					manejarEntrada();
+					actualizarJuego();
+					dibujarJuego();
+					if (!verificarEstado()) {
+						break;
+					}
+				}
+			}
+		}
 };
 
 int main (int argc, char *argv[]) {
