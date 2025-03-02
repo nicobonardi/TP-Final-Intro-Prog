@@ -69,7 +69,7 @@ public:
 			for (int j = 0; j < ANCHO; j++) {
 				linea += canonChar[i][j];
 			}
-			canon[i] = linea
+			canon[i] = linea;
 		}
 		mensaje = "No los enfrentes directamente";
 	}
@@ -77,7 +77,7 @@ public:
 			for(int i= 0; i<20;i++){
 				gotoxy(1,i+1);
 				textcolor(6);
-				cout<<canon[desplazamiento + VENTANA -1 -i];
+				cout<<canon[desplazamiento + WINDOW -1 -i];
 				textcolor(15);
 				VELOCIDAD = VEL_INICIAL - static_cast<int>(desplazamiento / 10);
 			}
@@ -232,8 +232,8 @@ public:
 	void actDesplazamiento(int _desplazamiento) {
 		if (_desplazamiento > ultDesplazamiento) {
 			posY++;
-			ulDesplazamiento = _desplazamiento;
-			if (posY > VENTANA) {
+			ultDesplazamiento = _desplazamiento;
+			if (posY > WINDOW) {
 				desactivar();
 			}
 		}
@@ -392,51 +392,51 @@ public:
 	void dibujarMarco() {
 		textcolor(WHITE);
 		// solo agrego línea inferior
-		gotoxy(1, VENTANA + 2);
+		gotoxy(1, WINDOW + 2);
 		putchar(218); 
-		gotoxy(1, VENTANA + 3);
+		gotoxy(1, WINDOW + 3);
 		putchar(179); 
-		gotoxy(ANCHO, VENTANA + 2);
+		gotoxy(ANCHO, WINDOW + 2);
 		putchar(191); 
-		gotoxy(ANCHO, VENTANA + 3);
+		gotoxy(ANCHO, WINDOW + 3);
 		putchar(179);
-		gotoxy(1, VENTANA + 4);
+		gotoxy(1, WINDOW + 4);
 		putchar(195); 
-		gotoxy(1, VENTANA + 5);
+		gotoxy(1, WINDOW + 5);
 		putchar(179);
-		gotoxy(ANCHO, VENTANA + 4);
+		gotoxy(ANCHO, WINDOW + 4);
 		putchar(180); 
-		gotoxy(ANCHO, VENTANA + 5);
+		gotoxy(ANCHO, WINDOW + 5);
 		putchar(179);
-		gotoxy(1, VENTANA + 6);
+		gotoxy(1, WINDOW + 6);
 		putchar(192); 
-		gotoxy(ANCHO, VENTANA + 6);
+		gotoxy(ANCHO, WINDOW + 6);
 		putchar(217); 
 		for (int i = 2; i <= ANCHO -1; i++) {
-			gotoxy(i, VENTANA + 2);
+			gotoxy(i, WINDOW + 2);
 			putchar(196);
-			gotoxy(i, VENTANA + 4);
+			gotoxy(i, WINDOW + 4);
 			putchar(196);
-			gotoxy(i, VENTANA + 6);
+			gotoxy(i, WINDOW + 6);
 			putchar(196);
 		}
-		gotoxy(ANCHO/2, VENTANA + 2);
+		gotoxy(ANCHO/2, WINDOW + 2);
 		putchar(194);
-		gotoxy(ANCHO/2, VENTANA + 3);
+		gotoxy(ANCHO/2, WINDOW + 3);
 		putchar(179);
-		gotoxy(ANCHO/2, VENTANA + 4);
+		gotoxy(ANCHO/2, WINDOW + 4);
 		putchar(193);
 		
 		textcolor(WHITE);
 	}
 	
 	void actInterface(int vidas, int puntaje) {
-		gotoxy(5, VENTANA + 3);
+		gotoxy(5, WINDOW + 3);
 		cout << "VIDAS: " << vidas;
-		gotoxy(21, VENTANA + 3);
+		gotoxy(21, WINDOW + 3);
 		cout << "   PUNTAJE: " << puntaje;
 		textcolor(LIGHTGREEN);
-		gotoxy(2,VENTANA + 5);
+		gotoxy(2, WINDOW + 5);
 		cout << mensaje;
 		textcolor(WHITE);
 	}
@@ -465,7 +465,7 @@ private:
 		}
 		puntaje = 0;
 		desplazamiento = 0;
-		VELOCIDAD = VELOCIDAD_INICIAL;
+		VELOCIDAD = VEL_INICIAL;
 		
 		zona.inicializarCanon();
 		clrscr();
@@ -493,7 +493,7 @@ private:
 			desplazamiento++;
 			puntaje += 10;
 			zona.dibujar();
-			enemigo.actualizarDesplazamiento(desplazamiento);
+			enemigo.actDesplazamiento(desplazamiento);
 			tInicioScroll = clock();
 			if (desplazamiento % 25 == 0 && !enemigo.estaActiva()) {
 				enemigo.activar(desplazamiento);
@@ -528,7 +528,7 @@ private:
 	
 	void dibujarJuego() {
 		gestorPantalla.dibujarMarco();
-		gestorPantalla.actualizarInterface(gladiador.getVidas(), puntaje);
+		gestorPantalla.actInterface(gladiador.getVidas(), puntaje);
 		enemigo.dibujar();
 		gladiador.dibujar();
 		for (int i = 0; i < 5; i++) {
